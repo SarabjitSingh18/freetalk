@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import { ENV } from "./env.js";
 export const connectDB = async()=>{
-    try {
+    try { 
         if(!ENV.MONGO_URI){
-            throw new Error("MONGO_URI is not defined please check env!!!")
+            throw new Error("MONGO_URI is not defined please check env if missing!!!")
         }
         const conn = await mongoose.connect(ENV.MONGO_URI)
         console.log(`MongoDB Connected: ${conn.connection.host}`)
