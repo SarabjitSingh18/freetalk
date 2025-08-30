@@ -8,6 +8,8 @@ const app = express()
 
 app.use(express.json())
 app.use(clerkMiddleware())
+
+
 app.use("/api/inngest", serve({ client: inngest, functions }));
 
 
@@ -16,7 +18,7 @@ const startServer = async () => {
     await connectDB();
     if (ENV.NODE_ENV !== "production") {
       app.listen(ENV.PORT, () => {
-        console.log("Server has started on the port:", ENV.PORT);
+        console.log("Server has started on the port and running:", ENV.PORT);
       });
     }
   } catch (error) {
