@@ -1,24 +1,31 @@
+import "../instrument.mjs"
 import express from "express"
 import { ENV } from "./config/env.js"
 import { connectDB } from "./config/db.js"
 import {clerkMiddleware} from "@clerk/express"
 import {serve} from "inngest/express"
 import { functions, inngest } from "./config/inngest.js";
+import * as Sentry from "@sentry/node"
+import chatRoutes from "./routes/chat.route.js"
 const app = express()
 
 app.use(express.json())
 app.use(clerkMiddleware())
+app.get("/debug-sentry", (req, res) => {
+  throw new Error("My first Sentry error app crashed but sentry is working!");
+});
 
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
+app.use("/api/chat",chatRoutes)
 
-
+Sentry.setupExpressErrorHandler(app)
 const startServer = async () => {
   try {
     await connectDB();
     if (ENV.NODE_ENV !== "production") {
       app.listen(ENV.PORT, () => {
-        console.log("Server has started on the port and running:", ENV.PORT);
+        console.log("Server has started on the port and runninh:", ENV.PORT);
       });
     }
   } catch (error) {
